@@ -470,11 +470,9 @@ function SWEP:SecondaryAttack()
 				timer.Destroy("Pik2ndryIdleAnim" .. self.Owner:UniqueID());
 				timer.Destroy("Pik2ndWhistle" .. self.Owner:UniqueID());
 				self.WhistleSound:Stop();
-				if (tr.Entity:GetClass() == "pikmin_nectar") then
-				v.AtkTarget = tr.Entity;
-				else
+				if v.IsCarrying == false then
+					v.AtkTarget = tr.Entity;
 				end
-				v.AtkTarget = tr.Entity;
 				self:SendWeaponAnim(ACT_VM_SECONDARYATTACK);
 				timer.Create("Pik2ndryIdleAnim" .. self.Owner:UniqueID(), 1.3, 1, function() self:SendWeaponAnim(ACT_VM_IDLE) end);
 				self.WhistleSound:Play();
