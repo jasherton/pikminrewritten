@@ -4,14 +4,20 @@
 	SWEP.Weight				= 5;
 	SWEP.AutoSwitchTo		= false;
 	SWEP.AutoSwitchFrom		= false;
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Ammo = "none"
+SWEP.Primary.ClipSize = -1
+SWEP.Primary.DefaultClip = -1
+SWEP.Primary.Ammo = "none"
 end
 
 
 if (CLIENT) then
-	SWEP.PrintName			= ("Louie Gun");	
+	SWEP.PrintName			= ("Olimar Gun");	
 	SWEP.Slot				= 1;
 	SWEP.SlotPos			= 1;
-	SWEP.DrawAmmo			= false;
+	SWEP.DrawAmmo			= true;
 	SWEP.DrawCrosshair		= true;
 	SWEP.WepSelectIcon = surface.GetTextureID("weapons/pikmincommand");
 end
@@ -22,6 +28,23 @@ function SWEP:Initialize()
 	if (SERVER) then
 		self:SetWeaponHoldType(self.HoldType);
 	end
+end
+
+function SWEP:CustomAmmoDisplay()
+	self.AmmoDisplay = self.AmmoDisplay or {}
+
+	self.AmmoDisplay.Draw = false //draw the display?
+
+	if self.Primary.ClipSize > 0 then
+		self.AmmoDisplay.PrimaryClip = self:Clip1() //amount in clip
+		self.AmmoDisplay.PrimaryAmmo = self:Ammo1() //amount in reserve
+	end
+	if self.Secondary.ClipSize > 0 then
+		self.AmmoDisplay.SecondaryClip = self:Clip2()
+		self.AmmoDisplay.SecondaryAmmo = self:Ammo2()
+	end
+
+	return self.AmmoDisplay //return the table
 end
 
 function SWEP:Deploy()
@@ -55,17 +78,33 @@ end
 
 SWEP.SelRadius = 0;
 
+local throwpikmin = nil;
+
 function SWEP:Think()
+if (self.Owner:WaterLevel() <= 1) then
+elseif (self.Owner:WaterLevel() < 3 and self.Owner:WaterLevel() >= 2) then
+local vel = self.Owner:GetVelocity();
+if (vel:Length() >= 50) then
+self.Owner:EmitSound("pikmin/splash" .. math.random(1,4) .. ".mp3")
+end
+else
+--nah
+end
+
 	if (self.Whistling) then
 		self.SelRadius = (self.SelRadius + 2); //Grow larger as long as we whistle
 		local tr = util.QuickTrace(self.Owner:GetShootPos(), (self.Owner:GetAimVector() * 750), {self.Owner, self});
 		if (tr.Hit) then
+		throwpikmin = nil;
 			local pos = tr.HitPos;
 			for k, v in pairs(ents.FindByClass("pikmin")) do
 				if (v:GetPos():Distance(pos) <= (10 + self.SelRadius)) then
 					if (v.Dismissed) then
 						v:Join(self.Owner);
 					end
+							if constraint.FindConstraint( v, "Weld" ) then
+							constraint.RemoveAll( v )
+							end
 					if (v.Olimar == self.Owner) then
 						if (v:IsOnFire()) then
 							v:Extinguish();
@@ -81,11 +120,107 @@ function SWEP:Think()
 					end
 				end
 			end
+			local Opos = self.Owner:GetPos();
+									for k, v in pairs(ents.FindByClass("pik_redonion")) do
+				if (v:GetPos():Distance(Opos) < (100)) then
+				if (v:CanCall() == true ) then
+					if (v:GetPikAmountLeaf() > 0) then
+					v:SetPikAmountLeaf(v:GetPikAmountLeaf() -1)
+					self.Owner:ConCommand( "pikmin_create red" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountBud() > 0) then
+					v:SetPikAmountBud(v:GetPikAmountBud() -1)
+					self.Owner:ConCommand( "pikmin_create_bud red" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountFlw() > 0) then
+					v:SetPikAmountFlw(v:GetPikAmountFlw() -1)
+					self.Owner:ConCommand( "pikmin_create_flower red" )
+					else
+					--nope
+					end
+					end
+					end
+					end
+					
+				for k, v in pairs(ents.FindByClass("pik_yellowonion")) do
+				if (v:GetPos():Distance(Opos) < (100)) then
+				if (v:CanCall() == true ) then
+					if (v:GetPikAmountLeaf() > 0) then
+					v:SetPikAmountLeaf(v:GetPikAmountLeaf() -1)
+					self.Owner:ConCommand( "pikmin_create yellow" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountBud() > 0) then
+					v:SetPikAmountBud(v:GetPikAmountBud() -1)
+					self.Owner:ConCommand( "pikmin_create_bud yellow" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountFlw() > 0) then
+					v:SetPikAmountFlw(v:GetPikAmountFlw() -1)
+					self.Owner:ConCommand( "pikmin_create_flower yellow" )
+					else
+					--nope
+					end
+					end
+					end
+					end
+					
+					for k, v in pairs(ents.FindByClass("pik_blueonion")) do
+				if (v:GetPos():Distance(Opos) < (100)) then
+				if (v:CanCall() == true ) then
+					if (v:GetPikAmountLeaf() > 0) then
+					v:SetPikAmountLeaf(v:GetPikAmountLeaf() -1)
+					self.Owner:ConCommand( "pikmin_create blue" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountBud() > 0) then
+					v:SetPikAmountBud(v:GetPikAmountBud() -1)
+					self.Owner:ConCommand( "pikmin_create_bud blue" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountFlw() > 0) then
+					v:SetPikAmountFlw(v:GetPikAmountFlw() -1)
+					self.Owner:ConCommand( "pikmin_create_flower blue" )
+					else
+					--nope
+					end
+					end
+					end
+					end
+					
+		end
+		else
+		if (target) then
+		target:Remove()
 		end
 	end
+	--[[local pikamount = {}
+						for k, v in pairs(ents.FindByClass("pikmin")) do
+							if (v.Olimar == self.Owner) then
+						table.insert(pikamount, v);
+						--print(table.Count( pikamount ))			
+							end
+						end
+for k, v in pairs(ents.FindByClass("pikmin")) do
+	if (v.Olimar == self.Owner) then
+	if (table.Count(pikamount) > 0) then
+	--self:SetClip1(table.Count( pikamount ))
+	end
+--		else
+--	self:SetClip1(table.Count( pikamount ))
+							end
+							end--]]
+							
+							
 end
-
-local throwpikmin = nil;
 
 local function PikSWepKeyPress(ply, key)
 	if (SERVER) then
@@ -109,6 +244,27 @@ local function PikSWepKeyPress(ply, key)
 						local rnd = math.random(1, #piks);
 						throwpikmin = piks[rnd];
 						ply.HasPikmin = true;
+						throwpikmin:EmitSound("pikmin/grab.wav", 100, math.random(98, 105));
+						local phys = throwpikmin:GetPhysicsObject()
+ 
+	if phys and phys:IsValid() then
+		phys:EnableMotion(true) -- Freezes the object in place.
+	end
+									constraint.RemoveConstraints( throwpikmin, "Weld" )
+									--throwpikmin:SetPos( Vector( (ply:GetPos().x)+25,(ply:GetPos().y)+25,(ply:GetPos().z)+25 ))
+									local vec = ply:GetAimVector();
+						local force = 50;
+						if (throwpikmin:GetPikType() == "yellow") then
+							force = 75;
+						elseif (throwpikmin:GetPikType() == "purple") then
+							force = 45;
+						end
+						vec = (vec * force);
+						--throwpikmin:SetPos((ply:GetShootPos() + (vec * 1)))
+									--constraint.Weld( ply, throwpikmin, 0, 0, throwpikmin.PhysicsBone, true, false );
+									throwpikmin:SetAnim("onfire")
+									throwpikmin:SetAnim("onfire")
+									throwpikmin:SetAnim("onfire")
 						timer.Create("PikPrimaryGrabSound" .. ply:UniqueID(), .8, 1,
 							function(ply)
 								if (player.HasPikmin) then
@@ -117,10 +273,43 @@ local function PikSWepKeyPress(ply, key)
 							end, ply);
 					end
 				end
+				
+								if (key == IN_WALK) then --IN_FORWARD
+						--if (ply:KeyDown(IN_WALK)) then
+					local piks = {};
+					local check = false;
+					for k, v in pairs(ents.FindByClass("pikmin")) do
+						if (v.Olimar == ply && !v.Attacking) then
+						local pik = v;
+						local ppos = pik:GetPos();
+						local vec = ply:GetAimVector();
+						local phys = pik:GetPhysicsObject();
+						local force = 25;
+						vec = (vec * force);
+						if (phys:IsValid()) then
+						local pos = ply:GetPos();
+							local ppos = v:GetPos();
+							if (ppos:Distance(pos) <= 300 && !v.JustThrown) then
+							if constraint.FindConstraint( v, "Weld" ) then
+							else
+							phys:ApplyForceCenter(((vec + Vector(0, 0, 5)) * 50));
+							v:EmitSound(Sound("pikmin/coming.wav"));
+							end
+						end
+					end
+				end
+				end
+				end
+				--end
+				
 				if (key == IN_RELOAD) then
 					if (!ply:KeyDown(IN_USE)) then
 						local tr = util.QuickTrace(ply:GetShootPos(), (ply:GetAimVector() * 1000), {ply, ply:GetActiveWeapon()});
+						--local target = ents.Create("prop_physics")
+		--target:SetModel("models/pikmin/pellet_1.mdl")
+		--target:Spawn()
 						if (tr.Hit) then
+						--target:SetPos(pos)
 							timer.Destroy("PikWhistlefor" .. ply:UniqueID());
 							timer.Destroy("PikPrimaryIdleAnim" .. ply:UniqueID());
 							timer.Destroy("Pik2ndryIdleAnim" .. ply:UniqueID());
@@ -149,12 +338,47 @@ local function PikSWepKeyPress(ply, key)
 							ply.Whistling = false;
 							ply.WhistleSound:Stop();
 						end
+						local piks2 = {};
+						local pikred = {};
+						local pikyel = {};
+						local pikblu = {};
+						local pikpur = {};
+						local pikwhi = {};
 						for k, v in pairs(ents.FindByClass("pikmin")) do
 							if (v.Olimar == ply) then
-								doanim = true;
-								v:Disband();
+						table.insert(piks2, v);
+						if (v:GetPikType() == "red") then
+						table.insert(pikred, v);
+						end
+						if (v:GetPikType() == "yellow") then
+						table.insert(pikyel, v);
+						end
+						if (v:GetPikType() == "blue") then
+						table.insert(pikblu, v);
+						end
+						if (v:GetPikType() == "purple") then
+						table.insert(pikpur, v);
+						end
+						if (v:GetPikType() == "white") then
+						table.insert(pikwhi, v);
+						end
+						print(table.Count( piks2 ))
+								doanim = true;								
 							end
 						end
+for k, v in pairs(ents.FindByClass("pikmin")) do
+	if (v.Olimar == ply) then
+if (table.Count( piks2 ) > 1) then
+if (table.Count(pikred) > 0 and table.Count(pikyel) > 0 or table.Count(pikred) > 0 and table.Count(pikblu) > 0 or table.Count(pikyel) > 0 and table.Count(pikred) > 0 or table.Count(pikyel) > 0 and table.Count(pikblu) > 0 or table.Count(pikblu) > 0 and table.Count(pikred) > 0 or table.Count(pikblu) > 0 and table.Count(pikyel) > 0 or table.Count(pikred) > 0 and table.Count(pikpur) > 0 or table.Count(pikyel) > 0 and table.Count(pikpur) > 0 or table.Count(pikblu) > 0 and table.Count(pikpur) > 0 or table.Count(pikred) > 0 and table.Count(pikwhi) > 0 or table.Count(pikyel) > 0 and table.Count(pikwhi) > 0 or table.Count(pikblu) > 0 and table.Count(pikwhi) > 0 or table.Count(pikpur) > 0 and table.Count(pikwhi) > 0) then
+v:DisbandAndSeparate();
+else
+v:Disband();
+end
+		else
+		v:Disband();
+							end
+							end
+							end
 						if (doanim) then
 							timer.Destroy("PikReloadIdleAnim" .. ply:UniqueID());
 							timer.Destroy("PikDeployIdleAnim" .. ply:UniqueID());
@@ -182,6 +406,7 @@ local function PikSWepKeyRelease(ply, key) //release primary, throw pikmin
 			if (IsValid(ply:GetActiveWeapon()) && ply:GetActiveWeapon():GetClass() == "olimar_gun") then
 				if (key == IN_ATTACK) then
 					if (IsValid(throwpikmin) && ply.HasPikmin) then
+					constraint.RemoveConstraints( throwpikmin, "Weld" )
 						timer.Destroy("PikPrimaryIdleAnim" .. ply:UniqueID());
 						timer.Destroy("PikDeployIdleAnim" .. ply:UniqueID());
 						local pik = throwpikmin;
@@ -193,10 +418,11 @@ local function PikSWepKeyRelease(ply, key) //release primary, throw pikmin
 						if (pik:GetPikType() == "yellow") then
 							force = 75;
 						elseif (pik:GetPikType() == "purple") then
-							force = 45;
+							force = 450;
 						end
 						vec = (vec * force);
 						if (phys:IsValid()) then
+						phys:EnableMotion(true)
 							phys:ApplyForceCenter(((vec + Vector(0, 0, 5)) * 125));
 						end
 						ply:GetActiveWeapon():SendWeaponAnim(ACT_VM_PRIMARYATTACK);
@@ -240,10 +466,14 @@ function SWEP:SecondaryAttack()
 	local tr = util.QuickTrace(self.Owner:GetShootPos(), (self.Owner:GetAimVector() * 10000), self.Owner);
 	if (IsValid(tr.Entity)) then
 		for k, v in pairs(ents.FindByClass("pikmin")) do
-			if (v.Olimar == self.Owner && (tr.Entity:IsNPC() || tr.Entity:IsPlayer())) then
+			if (v.Olimar == self.Owner && (tr.Entity:GetClass() == "pik_corpse" or tr.Entity:GetClass() == "pik_bulborb" or tr.Entity:GetClass() == "prop_physics" or (tr.Entity:GetClass() == "pikmin_nectar" and v:GetPikLevel() != 3) or tr.Entity:GetClass() == "pik_pellet" or  tr.Entity:GetClass() == "pik_pellet5" or tr.Entity:GetClass() == "pik_pellet10" or  tr.Entity:IsNPC() || tr.Entity:IsPlayer())) then
 				timer.Destroy("Pik2ndryIdleAnim" .. self.Owner:UniqueID());
 				timer.Destroy("Pik2ndWhistle" .. self.Owner:UniqueID());
 				self.WhistleSound:Stop();
+				if (tr.Entity:GetClass() == "pikmin_nectar") then
+				v.AtkTarget = tr.Entity;
+				else
+				end
 				v.AtkTarget = tr.Entity;
 				self:SendWeaponAnim(ACT_VM_SECONDARYATTACK);
 				timer.Create("Pik2ndryIdleAnim" .. self.Owner:UniqueID(), 1.3, 1, function() self:SendWeaponAnim(ACT_VM_IDLE) end);
