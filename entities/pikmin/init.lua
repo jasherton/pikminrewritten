@@ -582,7 +582,7 @@ if ( IsValid( phys ) ) then
 		phys:Wake()
 								local dir = (self:GetPos() - self:GetPos());
 					dir = (dir + Vector(-40, 0, 0));
-					phys:ApplyForceCenter((dir * 100 ));
+					phys:ApplyForceCenter((dir * 600 ));
 					self.Olimar = nil
 	--phys:ApplyForceCenter( Vector( 0, 3000, 0 ) )
 	self.Dismissed = true;
@@ -1131,8 +1131,8 @@ end
 						force = multipliedforce
 						end
 						if (self.PikClr == "purple") then	--purple weight section
-							force = 5475;
-							zforce = 5425;
+							force = 9900;
+							zforce = 7000;
 							self:GetPhysicsObject():SetMass(100);
 						end
 						if (self.PikClr == "white") then
