@@ -4,6 +4,7 @@ Changes
 	- Pikmin now make a sound when carrying stuff
 Fixes
 	- Sprouts react a LITTLE bit faster; the reaction time is part of previous optimization
-	- Fixed Purple Pikmin moving horribly slow
+	- Fixed leaf Pikmin moving too slow (for real, this time)
+	- Fixed Purple Pikmin moving horribly slow, even as flowers
 	- Fixed Purple Pikmin throw distance; now you can actually THROW them
 	- Fixed the Louie Gun not having the changed propeties of the Olimar Gun
