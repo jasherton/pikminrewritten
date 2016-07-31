@@ -1,17 +1,9 @@
+Additions
+	- Added Candypop Buds! Use these to produce Purple/White Pikmin
 Changes
-	- NPCs will now attack Pikmin!
-		- Some NPC attacks may not work on Pikmin, so this feature can be quite buggy
-		- This includes friendly NPCs (ie Resistance); this may be subject to change in the future
-	- Pikmin can now be affected by triggers (ie trigger_hurt)
-	- Purple and White Pikmin now separate upon dismiss, like the other three types
-	- Purple and White Pikmin will now carry spoils to a random Onion (this may be subject to change in the future)
-	- Killing an NPC now drops either nectar OR a 1 pellet, instead of just nectar
-	- If Pikmin are ordered to charge at nectar, flower Pikmin will now ignore the command
-	- Quite a few spawnlist changes:
-		- The Louie Gun is now in the same Weapons category (Pikmin) as the Olimar Gun
-		- Some entities in the spawnlist have been renamed (ie "Red Onion" is now "Onion (Red)") for ease of access 
-		- Nectar is now included in the spawnlist
+	- Pikmin now make a sound when carrying stuff
 Fixes
-	-Charging Pikmin will now properly latch onto NPCs
-	-Optimization fixes; 50+ Pikmin should now be active at once without lagging horribly
-		-However, leaf Pikmin now have piss-poor acceleration (which can't really be fixed, sorry)
+	- Sprouts react a LITTLE bit faster; the reaction time is part of previous optimization
+	- Fixed Purple Pikmin moving horribly slow
+	- Fixed Purple Pikmin throw distance; now you can actually THROW them
+	- Fixed the Louie Gun not having the changed propeties of the Olimar Gun
