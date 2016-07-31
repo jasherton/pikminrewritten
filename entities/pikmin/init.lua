@@ -1229,7 +1229,7 @@ end
 end
 end
 
-	if (thing:GetClass() == "pik_pellet") then
+	if (thing:GetClass() == "pik_pellet") and (!self.Dismissed) and (self.AtkTarget != nil) then
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
 	--local onion = ents.Create("npc_bullseye");
 	self.AtkTarget = nil
@@ -1289,14 +1289,14 @@ end
 		end
 				end
 
-		if (thing:GetClass() == "pik_pellet5") then
+		if (thing:GetClass() == "pik_pellet5") and (!self.Dismissed) and (self.AtkTarget != nil) then
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
 	--local onion = ents.Create("npc_bullseye");
 	self.AtkTarget = nil
-	self.IsCarrying = true
 	if (self:GetPikType() == "red") then
 	for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			--timer.Simple( 1, function() pluck:Spawn() end );
 			--timer.Simple( 1, function() thing:Remove() end );
 			--pluck:SetPos( (targetpos2 + (targetpos2.HitNormal * 1))); -- -35
@@ -1304,77 +1304,29 @@ end
 		elseif (self:GetPikType() == "yellow") then
 	for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 	self.AtkTarget = v;
-			end
-		elseif (self:GetPikType() == "blue") then
-	for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
-	self.AtkTarget = v;
-			end
-		elseif (self:GetPikType() == "purple") then
-		local randonion = math.random(1, 3)
-			if (randonion == 1) then
-				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
-				self.AtkTarget = v;
-					end
-			elseif (randonion == 2) then
-				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
-				self.AtkTarget = v;
-					end
-			elseif (randonion == 3) then
-				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
-				self.AtkTarget = v;
-					end
-			end
-		elseif (self:GetPikType() == "white") then
-		local randonion = math.random(1, 3)
-			if (randonion == 1) then
-				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
-				self.AtkTarget = v;
-					end
-			elseif (randonion == 2) then
-				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
-				self.AtkTarget = v;
-					end
-			elseif (randonion == 3) then
-				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
-				self.AtkTarget = v;
-					end
-			end
-	else
-	self.AtkTarget = nil
-	self.IsCarrying = false
-		end
-				end
-				
-		if (thing:GetClass() == "pik_pellet10") then
-	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
-	--local onion = ents.Create("npc_bullseye");
-	self.AtkTarget = nil
 	self.IsCarrying = true
-	if (self:GetPikType() == "red") then
-	for k, v in pairs( ents.FindByClass("pik_redonion") ) do
-	self.AtkTarget = v;
-			end
-		elseif (self:GetPikType() == "yellow") then
-	for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
-	self.AtkTarget = v;
 			end
 		elseif (self:GetPikType() == "blue") then
 	for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			end
 		elseif (self:GetPikType() == "purple") then
 		local randonion = math.random(1, 3)
 			if (randonion == 1) then
 				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 2) then
 				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 3) then
 				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			end
 		elseif (self:GetPikType() == "white") then
@@ -1382,14 +1334,17 @@ end
 			if (randonion == 1) then
 				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 2) then
 				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 3) then
 				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			end
 	else
@@ -1398,35 +1353,41 @@ end
 		end
 				end
 				
-					if (thing:GetClass() == "pik_corpse") then
+		if (thing:GetClass() == "pik_pellet10") and (!self.Dismissed) and (self.AtkTarget != nil) then
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
 	--local onion = ents.Create("npc_bullseye");
 	self.AtkTarget = nil
 	if (self:GetPikType() == "red") then
 	for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			end
 		elseif (self:GetPikType() == "yellow") then
 	for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			end
 		elseif (self:GetPikType() == "blue") then
 	for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			end
 		elseif (self:GetPikType() == "purple") then
 		local randonion = math.random(1, 3)
 			if (randonion == 1) then
 				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 2) then
 				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 3) then
 				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			end
 		elseif (self:GetPikType() == "white") then
@@ -1434,14 +1395,78 @@ end
 			if (randonion == 1) then
 				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 2) then
 				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 3) then
 				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
+					end
+			end
+	else
+	self.AtkTarget = nil
+	self.IsCarrying = false
+		end
+				end
+				
+					if (thing:GetClass() == "pik_corpse") and (!self.Dismissed) and (self.AtkTarget != nil) then
+	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
+	--local onion = ents.Create("npc_bullseye");
+	self.AtkTarget = nil
+	if (self:GetPikType() == "red") then
+	for k, v in pairs( ents.FindByClass("pik_redonion") ) do
+	self.AtkTarget = v;
+	self.IsCarrying = true
+			end
+		elseif (self:GetPikType() == "yellow") then
+	for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
+	self.AtkTarget = v;
+	self.IsCarrying = true
+			end
+		elseif (self:GetPikType() == "blue") then
+	for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
+	self.AtkTarget = v;
+	self.IsCarrying = true
+			end
+		elseif (self:GetPikType() == "purple") then
+		local randonion = math.random(1, 3)
+			if (randonion == 1) then
+				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
+				self.AtkTarget = v;
+				self.IsCarrying = true
+					end
+			elseif (randonion == 2) then
+				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
+				self.AtkTarget = v;
+				self.IsCarrying = true
+					end
+			elseif (randonion == 3) then
+				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
+				self.AtkTarget = v;
+				self.IsCarrying = true
+					end
+			end
+		elseif (self:GetPikType() == "white") then
+		local randonion = math.random(1, 3)
+			if (randonion == 1) then
+				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
+				self.AtkTarget = v;
+				self.IsCarrying = true
+					end
+			elseif (randonion == 2) then
+				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
+				self.AtkTarget = v;
+				self.IsCarrying = true
+					end
+			elseif (randonion == 3) then
+				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
+				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			end
 		end
@@ -1460,7 +1485,7 @@ end
 		constraint.RemoveConstraints( self, "Weld" )
 		end
 	
-	if (thing:GetClass() == "pik_bridgepart") then
+	if (thing:GetClass() == "pik_bridgepart") and (!self.Dismissed) and (self.AtkTarget != nil) then
 	for k,v in pairs(ents.FindByClass("pik_bridge")) do
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false )
 	self.IsCarrying = true
