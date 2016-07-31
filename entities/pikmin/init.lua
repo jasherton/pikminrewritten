@@ -19,6 +19,7 @@ function ENT:Initialize()
 	self:SetColor(Color(255, 255, 255, 255));
 	self:StartMotionController();
 	self:CreateBullseye()
+	self.IsCarrying = false
 	self.DrownSound = CreateSound(self, "pikmin/drowning.wav");
 	for k, v in pairs(ents.FindByClass("pikmin")) do
 		if (IsValid(v) && v != self) then
@@ -26,6 +27,11 @@ function ENT:Initialize()
 		end
 	end
 	for k, v in pairs(ents.FindByClass("pikmin_model")) do
+		if (IsValid(v) && v != self) then
+			constraint.NoCollide(self, v, 0, 0); 
+		end
+	end
+	for k, v in pairs(ents.FindByClass("npc_bullseye")) do
 		if (IsValid(v) && v != self) then
 			constraint.NoCollide(self, v, 0, 0); 
 		end
@@ -47,7 +53,7 @@ function ENT:CreateBullseye( height )
 	bullseye:SetAngles( self:GetAngles() )
 	bullseye:SetParent( self )
 	bullseye:SetSolid( SOLID_NONE )
-	bullseye:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
+	bullseye:SetCollisionGroup( COLLISION_GROUP_PLAYER )
 
 	bullseye:SetOwner( self )
 	bullseye:Spawn()
@@ -440,84 +446,10 @@ function ENT:Disband()
 		self.AtkTarget = nil;
 		self.Attacking = false;
 		self.Victim = nil;
+		self.IsCarrying = false
 		self:Mdl():SetNetworkedBool("Dismissed", true);
 		self:SetAnim("dismissed");
 		constraint.RemoveConstraints( self, "Weld" );
---[[	if (self:GetPikType() == "red") then
-local phys = self:GetPhysicsObject()
-if ( IsValid( phys ) ) then
-		phys:Wake()
-						local dir = (self:GetPos() - self:GetPos());
-					dir = (dir + Vector(30, 0, 0));
-					phys:ApplyForceCenter((dir * 100 ));
-					self.Olimar = nil
-	--phys:ApplyForceCenter( Vector( -3000, -3000, 0 ) )
-				self:SetAnim("running");
-	self.Dismissed = true;
-else
-end
-		end
-		
-		if (self:GetPikType() == "yellow") then
-local phys = self:GetPhysicsObject()
-if ( IsValid( phys ) ) then
-		phys:Wake()
-								local dir = (self:GetPos() - self:GetPos());
-					dir = (dir + Vector(0, 30, 0));
-					phys:ApplyForceCenter((dir * 100 ));
-					self.Olimar = nil
-	--phys:ApplyForceCenter( Vector( 0, -3000, 0 ) )
-			self:SetAnim("running");
-	self.Dismissed = true;
-else
-end
-		end
-		
-		if (self:GetPikType() == "blue") then
-		local phys = self:GetPhysicsObject()
-if ( IsValid( phys ) ) then
-		phys:Wake()
-								local dir = (self:GetPos() - self:GetPos());
-					dir = (dir + Vector(-30, 0, 0));
-					phys:ApplyForceCenter((dir * 100 ));
-					self.Olimar = nil
-	--phys:ApplyForceCenter( Vector( 0, 3000, 0 ) )
-	self.Dismissed = true;
-			self:SetAnim("dismissed");
-else
-end
-		end--]]
-		
---[[		if (self:GetPikType() == "red") then
-		self.Olimar = nil
-		end
-		
-		if (self:GetPikType() == "yellow") then
-		self.Olimar = nil
-		end
-		
-		if (self:GetPikType() == "blue") then
-		self.Olimar = nil
-		end
-		
-		if (self:GetPikType() == "purple") then
-		self.Olimar = nil
-		end
-		
-		if (self:GetPikType() == "white") then
-		self.Olimar = nil
-		end
-		
-		else
-		self.DismissShadowAng = self:GetAngles();
-		self.Olimar = nil;
-		self.Dismissed = true;
-		self.AtkTarget = nil;
-		self.Attacking = false;
-		self.Victim = nil;
-		self:Mdl():SetNetworkedBool("Dismissed", true);
-		--self:SetAnim("dismissed");
-		self:SetAnim("dismissed");--]]
 	end
 end
 
@@ -527,6 +459,7 @@ function ENT:DisbandAndSeparate()
 		self.AtkTarget = nil;
 		self.Attacking = false;
 		self.Victim = nil;
+		self.IsCarrying = false
 		self:Mdl():SetNetworkedBool("Dismissed", true);
 		self:SetAnim("dismissed");
 		constraint.RemoveConstraints( self, "Weld" );
@@ -582,7 +515,7 @@ if ( IsValid( phys ) ) then
 		phys:Wake()
 								local dir = (self:GetPos() - self:GetPos());
 					dir = (dir + Vector(-40, 0, 0));
-					phys:ApplyForceCenter((dir * 600 ));
+					phys:ApplyForceCenter((dir * 100 ));
 					self.Olimar = nil
 	--phys:ApplyForceCenter( Vector( 0, 3000, 0 ) )
 	self.Dismissed = true;
@@ -817,6 +750,7 @@ ENT.CanMove = true;
 ENT.ShouldSpin = false;
 ENT.LastPullApart = 0;
 ENT.Held = false;
+ENT.IsCarrying = false;
 
 function ENT:NodeTravel(ent)
 for k,v in pairs(ents.FindByClass(ent)) do
@@ -830,48 +764,9 @@ end
 end
 
 function ENT:Think()
---[[local model = self:Mdl()
-if (self.Olimar == nil) then
-model:ManipulateBoneAngles( 1, Angle(0, 0, 0))
---dont look at shit
-else
-local opos = self.Olimar:GetPos()
-local mypos = self:GetPos()
-local dist = mypos:Distance(opos)
-if (dist <= 50) then
-if (self.Olimar:Crouching() == true) then
-model:ManipulateBoneAngles( 1, Angle(0, 15, 0))
-else
-model:ManipulateBoneAngles( 1, Angle(0, 45, 0))
+if self.AtkTarget == nil then
+	self.IsCarrying = false
 end
-elseif (dist <= 75) then
-if (self.Olimar:Crouching() == true) then
-model:ManipulateBoneAngles( 1, Angle(0, 5, 0))
-else
-model:ManipulateBoneAngles( 1, Angle(0, 22.5, 0))
-end
-else
-model:ManipulateBoneAngles( 1, Angle(0, 0, 0))
-end
-end
-
-if (self.Olimar == nil) then
---don't detect noise
-else
-local opos = self.Olimar:GetPos()
-local mypos = self:GetPos()
-local dist = mypos:Distance(opos)
-if (dist <= 100) then
-if (self.Olimar:VoiceVolume() > 50) then
-self:SetAnim("onfire")
-timer.Simple(1, function()
-self:SetAnim("idle")
-end)
-else
---not even talking or lower or higher (dont detect in general)
-end
-end
-end--]]
 self:CreateRelationShip()
 for k, v in pairs(ents.FindByClass("pikmin")) do
 local model = v:Mdl()
@@ -902,24 +797,6 @@ else
 end
 end
 end
-
-
---[[	for k,v in pairs(ents.FindByClass("pik_bridgepart")) do
-	victimpos = self:GetPos()
-			targetpos = v:GetPos()
-			dist = victimpos:Distance( targetpos )
-			if (dist < 20) then
-			self.AtkTarget = v
-			for k,v in pairs(ents.FindByClass("pik_bridge")) do
-	victimpos = self:GetPos()
-			targetpos = v:GetPos()
-			dist = victimpos:Distance( targetpos )
-			if (dist < 2000) then
-			self.AtkTarget = v
-	end
-	end
-	end
-	end--]]
 	
 	for k,v in pairs(ents.FindByClass("pik_redonion")) do
 	if (self:GetPikType() == "red" ) then
@@ -1359,28 +1236,34 @@ end
 	if (self:GetPikType() == "red") then
 	for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			end
 		elseif (self:GetPikType() == "yellow") then
 	for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			end
 		elseif (self:GetPikType() == "blue") then
 	for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 	self.AtkTarget = v;
+	self.IsCarrying = true
 			end
 		elseif (self:GetPikType() == "purple") then
 		local randonion = math.random(1, 3)
 			if (randonion == 1) then
 				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 2) then
 				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 3) then
 				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			end
 		elseif (self:GetPikType() == "white") then
@@ -1388,35 +1271,21 @@ end
 			if (randonion == 1) then
 				for k, v in pairs( ents.FindByClass("pik_blueonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 2) then
 				for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			elseif (randonion == 3) then
 				for k, v in pairs( ents.FindByClass("pik_yellowonion") ) do
 				self.AtkTarget = v;
+				self.IsCarrying = true
 					end
 			end
 	else
 	self.AtkTarget = nil
-	--[[for k, v in pairs( ents.FindByClass("npc_bullseye") ) do
-	self.AtkTarget = v;
-			victimpos = self:GetPos()
-			targetpos = v:GetPos()
-			dist = victimpos:Distance( targetpos )
-			if (dist <= 200) then
-			constraint.RemoveConstraints( self, "Weld" );
-			local neweye = ents.Create("npc_bullseye");
-			neweye:SetPos(targetpos);
-			neweye:Spawn();
-			v:Remove();
-			timer.Simple( 1, function() thing:Remove() end );
-			--local pluck = ents.create("pik_pluckred");
-			--local targetpos2 = neweye:GetPos();
-			--pluck:SetPos( (targetpos2 + (targetpos2.HitNormal * -35));
-			end
-		end--]]
 		end
 				end
 
@@ -1424,6 +1293,7 @@ end
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
 	--local onion = ents.Create("npc_bullseye");
 	self.AtkTarget = nil
+	self.IsCarrying = true
 	if (self:GetPikType() == "red") then
 	for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 	self.AtkTarget = v;
@@ -1471,23 +1341,7 @@ end
 			end
 	else
 	self.AtkTarget = nil
-	--[[for k, v in pairs( ents.FindByClass("npc_bullseye") ) do
-	self.AtkTarget = v;
-			victimpos = self:GetPos()
-			targetpos = v:GetPos()
-			dist = victimpos:Distance( targetpos )
-			if (dist <= 200) then
-			constraint.RemoveConstraints( self, "Weld" );
-			local neweye = ents.Create("npc_bullseye");
-			neweye:SetPos(targetpos);
-			neweye:Spawn();
-			v:Remove();
-			timer.Simple( 1, function() thing:Remove() end );
-			--local pluck = ents.create("pik_pluckred");
-			--local targetpos2 = neweye:GetPos();
-			--pluck:SetPos( (targetpos2 + (targetpos2.HitNormal * -35));
-			end
-		end--]]
+	self.IsCarrying = false
 		end
 				end
 				
@@ -1495,6 +1349,7 @@ end
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
 	--local onion = ents.Create("npc_bullseye");
 	self.AtkTarget = nil
+	self.IsCarrying = true
 	if (self:GetPikType() == "red") then
 	for k, v in pairs( ents.FindByClass("pik_redonion") ) do
 	self.AtkTarget = v;
@@ -1539,23 +1394,7 @@ end
 			end
 	else
 	self.AtkTarget = nil
-	--[[for k, v in pairs( ents.FindByClass("npc_bullseye") ) do
-	self.AtkTarget = v;
-			victimpos = self:GetPos()
-			targetpos = v:GetPos()
-			dist = victimpos:Distance( targetpos )
-			if (dist <= 200) then
-			constraint.RemoveConstraints( self, "Weld" );
-			local neweye = ents.Create("npc_bullseye");
-			neweye:SetPos(targetpos);
-			neweye:Spawn();
-			v:Remove();
-			timer.Simple( 1, function() thing:Remove() end );
-			--local pluck = ents.create("pik_pluckred");
-			--local targetpos2 = neweye:GetPos();
-			--pluck:SetPos( (targetpos2 + (targetpos2.HitNormal * -24));
-			end
-		end--]]
+	self.IsCarrying = false
 		end
 				end
 				
@@ -1624,6 +1463,7 @@ end
 	if (thing:GetClass() == "pik_bridgepart") then
 	for k,v in pairs(ents.FindByClass("pik_bridge")) do
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false )
+	self.IsCarrying = true
 	victimpos = self:GetPos()
 			targetpos = v:GetPos()
 			dist = victimpos:Distance( targetpos )
@@ -1631,6 +1471,7 @@ end
 			self.AtkTarget = v
 			else
 			self.AtkTarget = nil
+			self.IsCarrying = false
 	end
 	end
 	end
