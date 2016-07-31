@@ -466,7 +466,7 @@ function SWEP:SecondaryAttack()
 	local tr = util.QuickTrace(self.Owner:GetShootPos(), (self.Owner:GetAimVector() * 10000), self.Owner);
 	if (IsValid(tr.Entity)) then
 		for k, v in pairs(ents.FindByClass("pikmin")) do
-			if (v.Olimar == self.Owner && (tr.Entity:GetClass() == "pik_corpse" or tr.Entity:GetClass() == "pik_bulborb" or tr.Entity:GetClass() == "prop_physics" or (tr.Entity:GetClass() == "pikmin_nectar" and v:GetPikLevel() != 3) or tr.Entity:GetClass() == "pik_pellet" or  tr.Entity:GetClass() == "pik_pellet5" or tr.Entity:GetClass() == "pik_pellet10" or  tr.Entity:IsNPC() || tr.Entity:IsPlayer())) then
+			if (v.Olimar == self.Owner && tr.Entity:GetClass() != "npc_bullseye" && (tr.Entity:GetClass() == "pik_corpse" or tr.Entity:GetClass() == "pik_bulborb" or tr.Entity:GetClass() == "prop_physics" or (tr.Entity:GetClass() == "pikmin_nectar" and v:GetPikLevel() != 3) or tr.Entity:GetClass() == "pik_pellet" or  tr.Entity:GetClass() == "pik_pellet5" or tr.Entity:GetClass() == "pik_pellet10" or  tr.Entity:IsNPC() || tr.Entity:IsPlayer())) then
 				timer.Destroy("Pik2ndryIdleAnim" .. self.Owner:UniqueID());
 				timer.Destroy("Pik2ndWhistle" .. self.Owner:UniqueID());
 				self.WhistleSound:Stop();
