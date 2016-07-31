@@ -152,6 +152,6 @@ else
 end
 end
 
-	self:NextThink( CurTime() + 0.3 )
+	self:NextThink( CurTime() + 0.25 )
 	return true
 end
