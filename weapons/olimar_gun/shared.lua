@@ -418,7 +418,7 @@ local function PikSWepKeyRelease(ply, key) //release primary, throw pikmin
 						if (pik:GetPikType() == "yellow") then
 							force = 75;
 						elseif (pik:GetPikType() == "purple") then
-							force = 45;
+							force = 450;
 						end
 						vec = (vec * force);
 						if (phys:IsValid()) then
