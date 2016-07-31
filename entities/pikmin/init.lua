@@ -58,10 +58,11 @@ function ENT:CreateBullseye( height )
 	bullseye:SetOwner( self )
 	bullseye:Spawn()
 	bullseye:Activate()
-	bullseye:SetHealth( 9999999 )
+	bullseye:SetHealth( self.PikHP )
 
 	self.Bullseye = bullseye
 end
+
 
 function ENT:CreateRelationShip()
 	if ( self.RelationTimer or 0 ) < CurTime() then
@@ -764,6 +765,7 @@ end
 end
 
 function ENT:Think()
+self.Bullseye:CallOnRemove( "PikDie", function() self:Die() end )
 if self.AtkTarget == nil then
 	self.IsCarrying = false
 end
