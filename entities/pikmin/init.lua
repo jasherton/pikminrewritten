@@ -1119,7 +1119,7 @@ end
 						local lvl = self:GetPikLevel();
 						local dir = (opos - pos);
 						if (self:GetPikLevel() == 1) then
-						local multipliedforce = force
+						local multipliedforce = force * 1.3
 						force = multipliedforce
 						end
 						if (self:GetPikLevel() == 2) then
