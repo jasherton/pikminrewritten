@@ -1,9 +1,15 @@
+IMPORTANT NOTICE: Pikmin will "die" if sent to the Onion, but they are still safely stored inside it. This is purely a cosmetic bug which we cannot fix for now, but may be fixed in the future.
+
 Additions
-	- Added Candypop Buds! Use these to produce Purple/White Pikmin
+	- Something new is in the spawnmenu...
 Changes
 	- Pikmin now make a sound when carrying stuff
-Fixes
+	- Pikmin won't respond to charge commands if they are busy carrying spoils
+	- Idle or dismissed Pikmin won't try to carry anything
 	- Sprouts react a LITTLE bit faster; the reaction time is part of previous optimization
+Fixes
+	- Fixed most NPC attacks not working on Pikmin
+	- Fixed Pikmin being able to charge at each other (thanks to the hidden npc_bullseye attached to them)
 	- Fixed leaf Pikmin moving too slow (for real, this time)
 	- Fixed Purple Pikmin moving horribly slow, even as flowers
 	- Fixed Purple Pikmin throw distance; now you can actually THROW them
