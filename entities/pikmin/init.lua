@@ -769,7 +769,7 @@ function ENT:Think()
 for k, v in pairs( ents.FindByClass("pik_masteronion") ) do
 	v:CallOnRemove( "NoMaster", function() self.MasterExists = false end )
 end
-self.Bullseye:CallOnRemove( "PikDie", function() self:Die() end )
+self.Bullseye:CallOnRemove( "PikDie", function() self:TakeDamage(self.PikHP) end )
 if self.AtkTarget == nil then
 	self.IsCarrying = false
 end
