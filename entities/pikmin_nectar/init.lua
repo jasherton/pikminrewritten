@@ -88,5 +88,12 @@ thing.AtkTarget = nil
 	thing:EmitSound("pikmin/coming.wav", 100, math.random(95, 110));
 	thing:SetAnim("onfire");
 	end
+end
+
+function ENT:PhysicsCollide(data, phys)
+	if (data.HitEntity:IsWorld()) then
+		self:SetSolid(SOLID_OBB)
+		self:SetMoveType(MOVETYPE_NONE)
 	end
+end
 
