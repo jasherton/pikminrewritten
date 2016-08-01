@@ -1057,6 +1057,10 @@ end
 
 
 	//On fire
+	if (self.Bullseye:IsOnFire()) then
+		self.Bullseye:Extinguish()
+		self:Ignite( 30 )
+	end
 	if (self:IsOnFire()) then
 		if (self:GetPikType() == "red") then
 			self:Extinguish();
