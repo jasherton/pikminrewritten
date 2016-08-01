@@ -1,9 +1,8 @@
 IMPORTANT NOTICE: Pikmin will "die" if sent to the Onion, but they are still safely stored inside it. This is purely a cosmetic bug which we cannot fix for now, but may be fixed in the future.
 
 Additions
-	- Something new is in the spawnmenu...
+	- Added the Master Onion. This Onion can produce all types of Pikmin, and they will carry spoils to it even if there are different onions in the map. However, if a Pikmin is stored in this Onion, it may come out a different color.
 Changes
-	- Pikmin now make a sound when carrying stuff
 	- Pikmin won't respond to charge commands if they are busy carrying spoils
 	- Idle or dismissed Pikmin won't try to carry anything
 	- Sprouts react a LITTLE bit faster; the reaction time is part of previous optimization
