@@ -1261,7 +1261,7 @@ end
 end
 end
 
-	if ( (thing:GetClass() == "pik_pellet") or (thing:GetClass() == "pik_pellet5") or (thing:GetClass() == "pik_pellet10") or (thing:GetClass() == "pik_corpse") ) and (!self.Dismissed) and (self.AtkTarget != nil) then
+	if ( (thing:GetClass() == "pik_pellet") or (thing:GetClass() == "pik_pellet5") or (thing:GetClass() == "pik_pellet10") or (thing:GetClass() == "pik_corpse") ) and (!self.Dismissed) and (self.AtkTarget != nil or self.JustThrown) and (self.IsCarrying == false) then
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
 	--local onion = ents.Create("npc_bullseye");
 	self.AtkTarget = nil
