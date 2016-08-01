@@ -196,6 +196,31 @@ end
 					end
 					end
 					
+					for k, v in pairs(ents.FindByClass("pik_masteronion")) do
+				if (v:GetPos():Distance(Opos) < (100)) then
+				if (v:CanCall() == true ) then
+					if (v:GetPikAmountLeaf() > 0) then
+					v:SetPikAmountLeaf(v:GetPikAmountLeaf() -1)
+					self.Owner:ConCommand( "pikmin_create random" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountBud() > 0) then
+					v:SetPikAmountBud(v:GetPikAmountBud() -1)
+					self.Owner:ConCommand( "pikmin_create_bud random" )
+					else
+					--nope
+					end
+					if (v:GetPikAmountFlw() > 0) then
+					v:SetPikAmountFlw(v:GetPikAmountFlw() -1)
+					self.Owner:ConCommand( "pikmin_create_flower random" )
+					else
+					--nope
+					end
+					end
+					end
+					end
+					
 		end
 		else
 		if (target) then
