@@ -14,7 +14,7 @@ end
 
 
 if (CLIENT) then
-	SWEP.PrintName			= ("Olimar Gun");	
+	SWEP.PrintName			= ("Louie Gun");	
 	SWEP.Slot				= 1;
 	SWEP.SlotPos			= 1;
 	SWEP.DrawAmmo			= true;
