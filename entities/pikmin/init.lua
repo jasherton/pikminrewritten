@@ -1347,7 +1347,14 @@ end
 	if (thing:GetClass() == "prop_physics") then
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false );
 	self.AtkTarget = nil
+	for k, v in pairs( ents.FindByClass("pik_masteronion") ) do
+		if IsValid(v) then
+			self.MasterExists = true
+			self.AtkTarget = v;
+			self.IsCarrying = true
 		end
+		end
+	end
 		
 	if (thing:GetClass() == "npc_bullseye") then
 	self.AtkTarget = thing
