@@ -470,6 +470,50 @@ self.absorbing = false
 end)
 end
 end
+for k,v in pairs(ents.FindByClass("prop_physics")) do
+local mypos = self:GetPos()
+local thatpos = v:GetPos()
+local dist = mypos:Distance(thatpos)
+if (dist <= 100 and !self.absorbing) then
+self.check = true
+self.absorbing = true
+v:GetPhysicsObject():EnableMotion(false)
+constraint.RemoveAll( v )
+v:SetModelScale( v:GetModelScale() / 9, 1 )
+v:SetCollisionGroup( 10 )
+v:SetPos(Vector(v:GetPos().x, v:GetPos().y, v:GetPos().z+1))
+timer.Create( "flyup", 0.1, 9, function()
+v:SetPos(Vector(self:GetPos().x, self:GetPos().y, v:GetPos().z+15))
+end)
+timer.Create( "playanim"  , 1.1, 1, function( )
+self:ResetSequence( 4 )
+end)
+timer.Create( "stopanim", 2, 1, function( )
+self:ResetSequence( 1 )
+end)
+timer.Create( "expel", 1, 1, function( )
+self:ResetSequence( 3 )
+end)
+timer.Create( "makeseeds", 1, 1, function()
+if (v:GetSkin() == 0) then
+			local pluck3 = ents.Create("pik_pluckwhite");
+			local pluck4 = ents.Create("pik_pluckpurple");
+			if ( !IsValid( pluck3 ) ) then return end
+			local rnd = math.random(100, 200);
+			local rnd2 = math.random(-100, -200);
+			pluck3:SetPos( Vector( (self:GetPos().x)+rnd+rnd2,(self:GetPos().y)+rnd+rnd2,(self:GetPos().z)-35 ))
+			pluck3:Spawn()
+			pluck4:SetPos( Vector( (self:GetPos().x)+rnd+rnd2,(self:GetPos().y)+rnd+rnd2,(self:GetPos().z)-35 ))
+			pluck4:Spawn()
+			v:Remove()
+			end
+			end)
+timer.Create( "reset", 1, 1, function( )
+self.check = false
+self.absorbing = false
+end)
+end
+end
 for k,v in pairs(ents.FindByClass("pik_pellet5")) do
 local mypos = self:GetPos()
 local thatpos = v:GetPos()
