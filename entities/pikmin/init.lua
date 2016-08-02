@@ -1364,6 +1364,28 @@ end
 		constraint.RemoveConstraints( self, "Weld" )
 		end
 	
+		if (self:IsValid()) then
+	local entity = constraint.FindConstraintEntity( self, "Weld" )
+	print(constraint.FindConstraintEntity( self, "Weld" ))
+	if (entity:IsValid()) then
+	if (constraint.FindConstraintEntity( self, "Weld" ) and entity:GetClass() == "phys_constraint") then
+	for k,v in pairs(ents.GetAll()) do
+	if (v:GetClass() == "pik_pellet" or v:GetClass() == "pik_pellet5" or v:GetClass() == "pik_pellet10") then
+	local opos = v:GetPos()
+	local mypos = self:GetPos()
+	local dist = mypos:Distance(opos)
+	local vel = self:GetVelocity()
+	if (dist <= 100 and vel:Length() >= 6) then
+	timer.Create("carry"..math.random(0, 1), 0, 1, function()
+	self:EmitSound("pikmin/carry.mp3", 100, 100)
+	end)
+	end
+	end
+	end
+	end
+	end
+	end
+	
 	if (thing:GetClass() == "pik_bridgepart") and (!self.Dismissed) and (self.AtkTarget != nil) then
 	for k,v in pairs(ents.FindByClass("pik_bridge")) do
 	constraint.Weld( thing, self, 0, 0, self.PhysicsBone, false, false )
