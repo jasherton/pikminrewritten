@@ -1,10 +1,12 @@
-IMPORTANT NOTICE: Pikmin will "die" if sent to the Onion, but they are still safely stored inside it. This is purely a cosmetic bug which we cannot fix for now, but may be fixed in the future.
+IMPORTANT NOTICE: If the Master Onion spawns as a Blue Onion with no beam, it is bugged. This can be fixed by simply removing the faulty Master Onion and spawning a new one.
 
 Additions
+	- Added Candypop Buds. Throwing Pikmin into a Bud will produce seeds of the Bud's color/
 	- Added the Master Onion. This Onion can produce all types of Pikmin, and they will carry spoils to it even if there are different onions in the map. However, if a Pikmin is stored in this Onion, it may come out a different color.
 Changes
 	- Pikmin won't respond to charge commands if they are busy carrying spoils
 	- Idle or dismissed Pikmin won't try to carry anything
+	- prop_physics can now be absorbed by the Master Onion to produce Purple/White Pikmin
 	- Sprouts react a LITTLE bit faster; the reaction time is part of previous optimization
 Fixes
 	- Fixed most NPC attacks not working on Pikmin
