@@ -92,8 +92,7 @@ end
 
 function ENT:PhysicsCollide(data, phys)
 	if (data.HitEntity:IsWorld()) then
-		self:SetSolid(SOLID_OBB)
-		self:SetMoveType(MOVETYPE_NONE)
+		self:GetPhysicsObject():EnableMotion(false)
 	end
 end
 
