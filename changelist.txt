@@ -15,3 +15,6 @@ Fixes
 	- Fixed Purple Pikmin moving horribly slow, even as flowers
 	- Fixed Purple Pikmin throw distance; now you can actually THROW them
 	- Fixed the Louie Gun not having the changed propeties of the Olimar Gun
+
+
+OLD CHANGELIST
